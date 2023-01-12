@@ -74,6 +74,7 @@ const SignUp = () => {
               type="password"
             />
             <div className="login-buttons">
+              <Button label="Sign Up" type="submit" />
               <Button label="Login" type="submit" />
             </div>
           </form>

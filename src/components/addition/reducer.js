@@ -16,7 +16,6 @@ const reducer = (state, action) => {
       return state.filter((todo) => todo.id !== action.id);
     case "done":
       return state.map((todo) => {
-        debugger;
         if (todo.id === action.id) {
           return { ...todo, done: !todo.done };
         }

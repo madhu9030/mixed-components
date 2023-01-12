@@ -1,5 +1,5 @@
 {
-    "name": "react-app",
+    "name": "mixed-component",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -21,10 +21,14 @@
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
-        "extends": "react-app"
+        "extends": "mixed-component"
     },
     "browserslist": {
-        "production": [">0.2%", "not dead", "not op_mini all"],
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
         "development": [
             "last 1 chrome version",
             "last 1 firefox version",
@@ -33,15 +37,5 @@
     },
     "devDependencies": {
         "node-sass": "^4.14.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/madhu9030/mixed-components.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/madhu9030/mixed-components/issues"
-    },
-    "homepage": "https://github.com/madhu9030/mixed-components#readme"
+    }
 }

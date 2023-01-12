@@ -178,7 +178,7 @@ function App() {
         </Switch>
       </Router>
       {/* <Addition /> */}
-      {/* <Main /> */}
+      <Main />
     </>
   );
 }
