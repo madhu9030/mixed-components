@@ -4,7 +4,7 @@ const Summary = ({ cartItems, addToCart }) => {
   const cartPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
   const totalCartItems = cartItems.reduce((a, c) => a + c.qty, 0);
   const taxPrice = cartPrice * 0.1;
-  const shippingPrice = cartPrice < 2000 ? 100.0 : 0.0;
+  const shippingPrice = cartPrice < 2000 ? 100 : 0;
   const totalPrice = cartPrice + taxPrice + shippingPrice;
   return (
     <div className="summary-wrapper">
@@ -24,7 +24,7 @@ const Summary = ({ cartItems, addToCart }) => {
         cartItems.map((data, i) => {
           return [
             <div className="cart-items-info fade-in" key={i}>
-              <img src={data.img} />
+              <img alt={data.name} src={data.img} />
               <div>{data.name}</div>
               <div className="cart-item-buttons">
                 <button
@@ -55,11 +55,11 @@ const Summary = ({ cartItems, addToCart }) => {
 
           <div className="item-summary">
             <div>Item Price</div>
-            <div>${cartPrice}.00</div>
+            <div>${cartPrice.toFixed(2)}</div>
           </div>
           <div className="item-summary">
             <div>Shipping Price</div>
-            <div>${shippingPrice}.00</div>
+            <div>${shippingPrice.toFixed(2)}</div>
           </div>
           <div className="item-summary">
             <div>Tax Price</div>
@@ -67,7 +67,7 @@ const Summary = ({ cartItems, addToCart }) => {
           </div>
           <div className="item-summary">
             <div>Total Price</div>
-            <div>${totalPrice}.00</div>
+            <div>${totalPrice.toFixed(2)}</div>
           </div>
           <div className="border"></div>
         </div>

@@ -1,5 +1,3 @@
-import React from "react";
-
 const reducer = (state, action) => {
   console.log(state);
   switch (action.type) {

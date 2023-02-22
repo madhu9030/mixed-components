@@ -40,6 +40,7 @@ const TodoList = ({
         }, 100);
       }
     });
+    return completedHandler(e)
   };
 
   return [

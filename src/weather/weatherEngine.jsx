@@ -3,7 +3,9 @@ import Weather from "./weather.jsx";
 
 function WeatherEngine(props) {
   const intialSearch = props.intialSearch;
+  console.log(intialSearch);
   const [search, searchCity] = useState(intialSearch);
+  const [date, setDate] = useState();
   const [childSearch, childSearchCity] = useState(intialSearch);
   const [weather, setWeather] = useState({
     temp: "",
@@ -38,20 +40,22 @@ function WeatherEngine(props) {
     });
   }
 
-  {
-    /* Make API call using Promise */
-  }
+  // Make API call using Promise
 
   const getWeather = async (q) => {
     //console.log(isNaN(search))
     let checkUserValue;
-    const checkCharPattern = /[1-9]/g;
-    const checkNumPattern = /[a-z, A-Z]/gi;
-    const checkPatteren =
-      search.match(checkCharPattern) && search.match(checkNumPattern);
+    // const checkCharPattern = /[1-9]/g;
+    // const checkNumPattern = /[a-z, A-Z]/gi;
+    // const checkPatteren =
+    //   !(search.long && search.lat) &&
+    //   search.match(checkCharPattern) &&
+    //   search.match(checkNumPattern);
 
-    if (isNaN(search)) {
+    if (isNaN(search) && !(search.long && search.lat)) {
       checkUserValue = `q=${search}`;
+    } else if (search.long && search.lat) {
+      checkUserValue = `lat=${search.lat}&lon=${search.long}`;
     } else {
       checkUserValue = `zip=${search}`;
     }
@@ -68,18 +72,20 @@ function WeatherEngine(props) {
       const dateBuilder = (timezone) => {
         const nowInLocalTime = Date.now() + 1000 * (timezone / 3600);
         const millitime = new Date(nowInLocalTime);
-        const dateFormat = millitime.toLocaleString();
+        // const dateFormat = millitime.toLocaleString();
 
-        let day = millitime.toLocaleString("en-IN", { weekday: "long" });
-        let month = millitime.toLocaleString("en-IN", { month: "long" });
-        let date = millitime.toLocaleString("en-IN", { day: "numeric" });
-        let year = millitime.toLocaleString("en-IN", { year: "numeric" });
-        let hours = millitime.toLocaleString("en-IN", { hour: "numeric" });
-        let minutes = millitime.toLocaleString("en-IN", { minute: "numeric" });
+        let day = millitime.toLocaleString("en-US", { weekday: "short" });
+        let month = millitime.toLocaleString("en-US", { month: "short" });
+        let date = millitime.toLocaleString("en-US", { day: "numeric" });
+        let year = millitime.toLocaleString("en-US", { year: "2-digit" });
+        let hours = millitime.toLocaleString("en-US", { hour: "numeric" });
+        let minutes = millitime.toLocaleString("en-US", { minute: "numeric" });
 
         return `${day} ${date} ${month} ${year} ${hours}:${minutes}`;
       };
-      // console.log(res, dateBuilder(19800));
+      setDate(dateBuilder(res.timezone));
+      console.log(res, dateBuilder(res.timezone));
+      searchCity(res.name);
       return res.main
         ? setWeather({
             temp: res.main.temp,
@@ -113,7 +119,7 @@ function WeatherEngine(props) {
   const id = `search-${Math.random() * 3}`;
   return (
     <div>
-      <div className="App fade-in">
+      <div className="weather-app fade-in">
         <form className="search">
           <input
             id={id}
@@ -121,7 +127,7 @@ function WeatherEngine(props) {
             type="text"
             value={search}
             onChange={(e) => searchCity(e.target.value)}
-            className={search ? "focused" : ""}
+            className={search ? "focused disabled" : ""}
           />
           <label htmlFor={id}>Zipcode or City</label>
           <button onClick={(e) => handleSearch(e)}>Search</button>
@@ -137,6 +143,7 @@ function WeatherEngine(props) {
           childChange={getChildInputValue}
           clickBack={updatePromise}
           inputValue={childSearch}
+          time={date}
         />
       </div>
     </div>

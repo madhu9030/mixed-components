@@ -47,6 +47,15 @@ body {
 }
 
 .App {
+    text-align: center;
+    display: flex;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 31px #353535;
+}
+
+.weather-app {
   text-align: center;
   display: flex;
   justify-content: space-evenly;

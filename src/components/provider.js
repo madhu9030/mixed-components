@@ -1,5 +1,5 @@
 import React from "react";
 
-const dataProvider = React.createContext(null);
+const UseDataProvider = React.createContext(null);
 
-export default dataProvider;
+export default UseDataProvider;

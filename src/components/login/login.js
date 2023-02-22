@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link, Route, useLocation } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { Link, Route, useLocation, Redirect, Switch, Router } from "react-router-dom";
 
 import TextField from "../textField/textField";
 import Button from "../button/button";
@@ -84,31 +84,27 @@ const SignUp = () => {
   );
 };
 
-const Login = () => {
+const Login = ({isLogin, login}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailVaild, setEmailVaild] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState(["Please enter Email"]);
   const [disable, setDisable] = useState(false);
+  const [isLoading, setloading] = useState(null);
 
   let location = useLocation();
-  console.log(location === "/login");
-  useEffect(() => {
-    if (location.pathname !== "/login") {
-      setDisable(true);
-    } else {
-      setDisable(false);
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if(Loading) return <Switch><Route path="/login" render={() => <Redirect to="/home" />} /></Switch>
+  // }, [isLoading]);
 
-  const onBlur = (e) => {
-    if (e.target.value === "") {
-      setPasswordValid(true);
-    } else {
-      setPasswordValid(false);
-    }
-  };
+  // const onBlur = (e) => {
+  //   if (e.target.value === "") {
+  //     setPasswordValid(true);
+  //   } else {
+  //     setPasswordValid(false);
+  //   }
+  // };
 
   const emailValid = (e) => {
     const pattern = new RegExp(
@@ -130,8 +126,14 @@ const Login = () => {
   };
   const ref = useRef(null);
   const validation = (e) => {
+    setloading(true)
     e.preventDefault();
-    if (email && password) {
+    if (email.toLocaleLowerCase() === "msreddy490@gmail.com" && password === "M@dhu9030") {
+      window.localStorage.setItem('sessionId', `madhu9030`)
+      setTimeout(() => {
+        setloading(false)
+      }, 2000);
+      return <Router><Switch><Route path="/login" render={() => <Redirect to="/home" />} /></Switch></Router>
     } else {
       setPasswordValid(true);
       setEmailVaild(true);
@@ -157,7 +159,7 @@ const Login = () => {
     <div className="login-wrapper fade-in">
       <div className={`login-fields ${disable ? "disable" : ""}`}>
         <div className="login-title">Enter Login Details</div>
-        <form onSubmit={(e) => validation(e)}>
+        <form onSubmit={(e) => validation(e)} method="POST">
           <TextField
             inputLabel="Email"
             id="email"
@@ -182,7 +184,7 @@ const Login = () => {
             errorMessage={errorMessage}
           />
           <div className="login-buttons">
-            <Button label="Login" type="submit" disabled={disable} />
+              <Button label="Login" type="submit" disabled={disable} isLoading= {isLoading} />
 
             <Button buttonLink label="Forgot Password" disabled={disable} />
           </div>

@@ -11,11 +11,12 @@ import Spinner from "./components/spinner/spinner";
 import Music from "./components/music/music";
 import Login from "./components/login/login";
 import Overlay from "./components/overlay/overlay";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Addition from "./components/addition/addition";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Main from "./components/randomSite/main";
-import dataProvider from "./components/provider";
+import UseDataProvider from "./components/provider";
 import SyncScroll from "./components/syncronousScroll/syncScroll";
+import ProgressBar from './components/progressBar/progressBar'
+import Button from "../src/components/button/button";
 //API's
 /**
  * Dummy user data: https://reqres.in/api/users?page=2
@@ -24,13 +25,41 @@ import SyncScroll from "./components/syncronousScroll/syncScroll";
 function App() {
   //Local storage
   let localTodos = [];
+  const [sessionActive, setSessionActive] = useState(false)
+  const [login, setLogin] = useState(true);
+  const [getLongLat, setGetLongLat] = useState();
   useEffect(() => {
-    if (JSON.parse(window.localStorage.getItem("localTodo"))) {
-      localTodos = JSON.parse(localStorage.getItem("localTodo"));
+    const LocalStorageData = localStorage.getItem("localTodo")
+    const sessionId = window.localStorage.getItem('sessionId');
+    if(sessionId) {
+      setSessionActive(true)
+      setLogin(false)
+    }
+    if (LocalStorageData) {
+      localTodos = JSON.parse(LocalStorageData);
       setTodo(localTodos);
-      // ref.current.focus();
     }
   }, []);
+
+  const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+const getLongLats = (pos) => {
+    const crd = pos.coords;
+    setGetLongLat({
+      lat: crd.latitude,
+      long: crd.longitude,
+    });
+  };
+
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  navigator.geolocation.getCurrentPosition(getLongLats, error, options);
 
   const ref = useRef(null);
   const [input, setInput] = useState("");
@@ -40,6 +69,7 @@ function App() {
   const [loading, setloading] = useState(false);
   const [edit, setEdit] = useState(false);
   const [geteditId, setgeteditId] = useState(null);
+  const [currentStep, setCurrentStep] = useState("shoping");
 
   useEffect(() => {
     window.localStorage.setItem("localTodo", JSON.stringify(todo));
@@ -102,26 +132,31 @@ function App() {
     },
   };
 
-  const name = {
+  const data = {
     first: "madhu",
     second: "reddy",
+    currentStep,
+    setCurrentStep
   };
-  const syncScrol = (scroll) => {
-    const face1 = document.getElementById("scroll1");
-    const face2 = document.getElementById("scroll2");
-    if (scroll == "scroll1") {
-      face2.scrollTop = face1.scrollTop;
-    } else {
-      face1.scrollTop = face2.scrollTop;
-    }
-  };
+  // const syncScrol = (scroll) => {
+  //   const face1 = document.getElementById("scroll1");
+  //   const face2 = document.getElementById("scroll2");
+  //   if (scroll == "scroll1") {
+  //     face2.scrollTop = face1.scrollTop;
+  //   } else {
+  //     face1.scrollTop = face2.scrollTop;
+  //   }
+  // }
+  console.log(sessionActive)
   return (
-    <>
+  <UseDataProvider.Provider value={data}>
+    <div className="App">
       <Router>
-        <NavBar />
+        {!login && <NavBar />}
+        {(sessionActive) ? <Switch><Route path="/" render={() => <Redirect to="/home" />} /></Switch> : <Switch><Route path="/" render={() => <Redirect to="/login" />} /></Switch>}
         <Switch>
           <Route path="/home">
-            <div className="flex">Home</div>
+            <Main />
           </Route>
           <Route path="/news">
             <div className="flex">News</div>
@@ -131,15 +166,14 @@ function App() {
           <Route path="/overlay" component={Overlay} />
           <Route path="/weather">
             <div className="weather-list">
-              <WeatherEngine intialSearch="" />
+              {getLongLat && getLongLat.long && <WeatherEngine intialSearch={getLongLat} />}
               <WeatherEngine intialSearch="94086" />
               <WeatherEngine intialSearch="Hyderabad" />
               <WeatherEngine intialSearch="Barrow" />
             </div>
           </Route>
           <Route path="/todoapp">
-            <dataProvider.Provider value={name}>
-              <div className="todo-app fade-in">
+            <div className="todo-app fade-in">
                 <div className="text-field-dropdown">
                   <TextField
                     buttonLabel={!edit ? "Add Todo" : "Update"}
@@ -167,19 +201,24 @@ function App() {
                     geteditId={geteditId}
                   />
                 ) : (
-                  <Loading text="Editing" />
+                  <>
+                  <Loading text="Editing" /><Button onClick = {()=> setEdit(false)} label= "Cancel" buttonLink={true} className="cancel-edit"/>
+                  </>
                 )}
               </div>
-            </dataProvider.Provider>
+
           </Route>
           <Route path="/randomuser" component={GetRandomUser} />
           <Route path="/syncscroll" component={SyncScroll} />
+          <Route path="/progressbar" component={ProgressBar} />
           <Route path="/login" component={Login} />
         </Switch>
       </Router>
       {/* <Addition /> */}
-      <Main />
-    </>
+      
+    </div>
+  </UseDataProvider.Provider>
+
   );
 }
 

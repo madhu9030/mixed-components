@@ -4,12 +4,13 @@ import Products from "./products";
 import "./products.scss";
 import Summary from "./summary";
 import NavBarSearch from "./navBarSearch";
+import ProgressBar from '../progressBar/progressBar'
 
 const Main = () => {
   const [products, setProducts] = useState(data.products);
   const [cartItems, setCartItems] = useState([]);
   const [input, setInput] = useState("");
-  const [filterList, setFilterList] = useState(data.products);
+  const [filterList] = useState(data.products);
   const addToCart = (e) => {
     const isExist = cartItems.find((data) => data.id === e.target.id);
 
@@ -18,6 +19,7 @@ const Main = () => {
         if (e.target.id === data.id) {
           return setCartItems([...cartItems, data]);
         }
+        return null;
       });
 
     isExist &&
@@ -54,18 +56,20 @@ const Main = () => {
       if (product.name.toLowerCase().includes(e.target.value.toLowerCase())) {
         return true;
       }
+      return null
     });
     setProducts(filtered);
   };
-
+  const steps = ["Shopping Cart", "Shipping Details", "Payment Details"];
   return (
-    <div>
+    <div className="fade-in">
       <NavBarSearch
         setProducts={setProducts}
         products={products}
         input={input}
         getFilterList={getFilterList}
       />
+      <ProgressBar steps={steps}/>
       <div className="products-info">
         <Products
           products={products}

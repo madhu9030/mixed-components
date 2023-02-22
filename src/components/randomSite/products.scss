@@ -2,18 +2,13 @@ $border: linear-gradient(to left, #d327c5 0%, #4b12fa 51%, #f0ff1f 100%);
 
 .products-wrapper {
   width: 70%;
-  background: white;
   border-radius: 10px;
   margin: 0 20px;
   padding: 20px 20px 0px 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  background: -webkit-linear-gradient(
-    90deg,
-    hsla(186, 33%, 94%, 1) 0%,
-    hsla(216, 41%, 79%, 1) 100%
-  );
+  box-shadow: 0px 0px 39px 0px #353535;
 
   img {
     width: 181px;
@@ -24,19 +19,12 @@ $border: linear-gradient(to left, #d327c5 0%, #4b12fa 51%, #f0ff1f 100%);
 
 .products {
   text-align: center;
-  border: 10px solid;
   border-image-slice: 1;
   border-width: 1px;
-  border-image-source: linear-gradient(
-    to left,
-    #db7fd4 0%,
-    #4b12fa 51%,
-    #daa058 100%
-  );
+  background: linear-gradient(180deg, #16a085 0%, #f7fafa 51%, #16a085 100%);
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
-  background-color: #f7fafa;
 
   &:not(:last-child) {
     margin-right: 20px;
@@ -67,15 +55,10 @@ $border: linear-gradient(to left, #d327c5 0%, #4b12fa 51%, #f0ff1f 100%);
 
 .summary-wrapper {
   width: 30%;
-  background: white;
   border-radius: 10px;
   margin-right: 20px;
   padding: 20px;
-  background: -webkit-linear-gradient(
-    90deg,
-    hsla(186, 33%, 94%, 1) 0%,
-    hsla(216, 41%, 79%, 1) 100%
-  );
+  box-shadow: 0px 0px 39px 0px #353535;
 }
 
 .summary {
@@ -93,7 +76,7 @@ $border: linear-gradient(to left, #d327c5 0%, #4b12fa 51%, #f0ff1f 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #bacbe2;
+  transition: all .5s;
 
   img {
     width: 30px;
@@ -220,4 +203,14 @@ $border: linear-gradient(to left, #d327c5 0%, #4b12fa 51%, #f0ff1f 100%);
 .fa-shopping-cart {
   padding-left: 5px;
   color: red;
+}
+
+.products-search {
+  width: 80%;
+  margin: auto;
+  
+  .dropdown-list {
+    width: 50%;
+    margin: auto;
+  }
 }
